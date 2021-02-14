@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Aktualny kurs walut z dnia
+			{{ date }},
+			{{ time }}
+		</title>
+		<style>
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: #ffffff;
+				color: #333333;
+				font-family: Arial;
+				padding: 1rem;
+				margin: 0 auto;
+			}
+
+			h1,
+			h2,
+			h3,
+			h3,
+			h5,
+			h6 {
+				font-weight: normal;
+			}
+
+			table {
+				vertical-align: top;
+				text-align: left;
+			}
+			tr {
+				vertical-align: top;
+			}
+			th {
+				text-align: left;
+			}
+			td {
+				vertical-align: top;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="space"></div>
+		<main>
+			<h3>
+				Aktualny kurs walut z dnia
+				{{ date }},
+				{{ time }}
+			</h3>
+			<h5>
+				Tabela kursowa
+				{{ table }}
+			</h5>
+			<table>
+				<tr>
+					<th>Waluta</th>
+					<th>Symbol</th>
+					<th>Kupno</th>
+					<th>Sprzedaż</th>
+				</tr>
+				{% for r in rate %}
+					{% if r['symbol'] in symbols %}
+						<tr>
+							<td>{{ r['name'] }}</td>
+							<td>{{ r['symbol'] }}</td>
+							<td>{{ r['buy'] }}</td>
+							<td>{{ r['sell'] }}</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		</main>
+	</body>
+</html>
