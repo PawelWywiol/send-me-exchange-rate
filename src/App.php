@@ -17,9 +17,14 @@ function Scrap()
   ];
   $url = $_ENV['COMPONENT_URL'] ?? "";
   if (!empty($url)) {
+    $match = [];
     $html = IO\fetch($url)['response'] ?? "";
+
+    preg_match_all('/component-container exchange_rates__inner(.*?)<div class="clearFix">/', $html, $match);
+
+    $html = str_contains($match[1][0] ?? "", "--money") ? $match[1][0] : ($match[1][1] ?? "");
+
     if (!empty($html)) {
-      $match = [];
       preg_match_all('/<span[^>]*>(.*?)<\/span>/', $html, $match);
       if (!empty($match[1] ?? []) && count($match[1]) > 6) {
         $result['rate'] = [];
@@ -68,13 +73,13 @@ function Scrap()
           }
         }
       } else {
-        $result['error'][] = 'No data match';
+        $result['error'][] = ['message' => 'No data match', 'match' => $match, 'html' => $html];
       }
     } else {
-      $result['error'][] = 'Empty html';
+      $result['error'][] = ['message' => 'Empty html'];
     }
   } else {
-    $result['error'][] = 'Empty url';
+    $result['error'][] = ['message' => 'Empty url'];
   }
 
   return $result;
